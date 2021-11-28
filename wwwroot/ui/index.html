@@ -1,14 +1,85 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
     <title>Aka</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
-    <!-- <link rel='stylesheet' type='text/css' media='screen' href='main.css'> -->
-    <!-- <script src='main.js'></script> -->
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+    </style>
 </head>
+
 <body>
     <h1>Aka</h1>
+    <table id="EntryTable" style="width:400px">
+        <tr>
+            <th>ID</th>
+            <th>URL</th>
+            <th>Actions</th>
+        </tr>
+    </table>
+    <form>
+        <input type="text" id="id" placeholder="id">
+        <br>
+        <input type="text" id="value" placeholder="URL">
+        <br>
+        <button type="button" id="btnSubmit">Submit</button>
+    </form>
+    <script>
+        async function load() {
+            let req = await fetch('/all')
+            let data = await req.json()
+            let entryTable = document.getElementById('EntryTable')
+            console.log(data)
+            for (var id in data) {
+                let row = document.createElement('tr')
+                let idCell = document.createElement('td')
+                let urlCell = document.createElement('td')
+                let actionCell = document.createElement('td')
+
+                idCell.innerText = id
+                urlCell.innerText = data[id]
+                let deleteButton = document.createElement('button')
+                deleteButton.innerText = 'Delete'
+                deleteButton.addEventListener('click', async () => {
+                    let req = await fetch(`/${id}`, {
+                        method: 'DELETE'
+                    })
+                    let data = await req.text()
+                    location.reload()
+                })
+                actionCell.appendChild(deleteButton)
+                row.appendChild(idCell)
+                row.appendChild(urlCell)
+                row.appendChild(actionCell)
+                entryTable.appendChild(row)
+            }
+        }
+
+        load()
+
+        document.getElementById('btnSubmit').addEventListener('click', async e => {
+            e.preventDefault()
+            let id = document.getElementById('id').value
+            let value = document.getElementById('value').value
+            if (id === "" || value === "")
+                return
+            let url = new URL(location.protocol + '//' + location.host)
+            url.searchParams.append('id', id)
+            url.searchParams.append('value', value)
+            let req = await fetch(url, { method: 'POST' })
+            let data = await req.text()
+            console.log(data)
+            location.reload()
+        })
+
+    </script>
 </body>
+
 </html>

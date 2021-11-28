@@ -99,7 +99,9 @@ public class DataController
 
     public bool DeleteKeyValue(string key)
     {
-        return data.Remove(key);
+        var ret = data.Remove(key);
+        Task t = save();
+        return ret;
     }
     
 }
