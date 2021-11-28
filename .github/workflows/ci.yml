@@ -29,4 +29,3 @@ jobs:
         context: .
         push: true
         tags: ghcr.io/markhuang1212/aka
-        labels: latest
