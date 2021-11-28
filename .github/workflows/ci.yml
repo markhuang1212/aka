@@ -1,0 +1,19 @@
+name: Continous Integration
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      run: docker build . -t ghcr.io/markhuang1212/
+    - run: echo $GITHUB_TOKEN | docker login ghcr.io -u markhuang1212 --password-stdin
