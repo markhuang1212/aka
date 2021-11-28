@@ -90,4 +90,10 @@ class DataController
         data.TryGetValue(key, out ret);
         return ret;
     }
+
+    public bool DeleteKeyValue(string key)
+    {
+        return data.Remove(key);
+    }
+    
 }

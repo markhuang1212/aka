@@ -42,9 +42,26 @@ public class AkaController : ControllerBase
             _logger.LogError(e, "Post({id}, {value})", id, value);
             return BadRequest();
         }
-        return Ok(new Dictionary<string,string>{
+        return Ok(new Dictionary<string, string>{
             { "id", id },
             { "value", value }
         });
     }
+
+    [HttpDelete("{id}")]
+    public IActionResult Delete(string id)
+    {
+        try
+        {
+            _dataController.DeleteKeyValue(id);
+            _logger.LogInformation("Delete({id})", id);
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, "Delete({id})", id);
+            return BadRequest();
+        }
+        return Ok();
+    }
+
 }
