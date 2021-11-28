@@ -11,3 +11,8 @@ services:
       - APP_DATA=/data
     volumes:
       - .:/data
+  cloudflared:
+    image: cloudflare/cloudflared:2021.11.0
+    volumes:
+      - ~/.cloudflared:/etc/cloudflared
+    command: tunnel --hostname hmpg.dev --url http://localhost:8080
