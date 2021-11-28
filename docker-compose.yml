@@ -10,7 +10,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - APP_DATA=/data
     volumes:
-      - .:/data
+      - "/data:/data"
   cloudflared:
     image: cloudflare/cloudflared:2021.11.0
     volumes:

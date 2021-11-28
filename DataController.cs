@@ -2,15 +2,14 @@ namespace aka;
 
 using System.IO;
 using System.Linq;
-using System.Net;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 public class DataController
 {
-    // public static DataController? shared;
-    string? dataFile;
+    private readonly string? dataFile;
     private readonly ILogger<DataController> _logger;
-    public Dictionary<string, string> data = new Dictionary<string, string>();
+    public ConcurrentDictionary<string, string> data = new ConcurrentDictionary<string, string>();
     public static Tuple<string, string> ParseLineToKV(string line)
     {
         string k = "";
@@ -44,6 +43,8 @@ public class DataController
             _logger.LogInformation("No dataFile given, in memory mode");
             return;
         }
+        // create if not exist
+        File.Open(dataFile, FileMode.OpenOrCreate, FileAccess.ReadWrite).Dispose();
 
         this.dataFile = dataFile;
         var lines = File.ReadLines(dataFile);
@@ -99,7 +100,7 @@ public class DataController
 
     public bool DeleteKeyValue(string key)
     {
-        var ret = data.Remove(key);
+        var ret = data.Remove(key, out _);
         Task t = save();
         return ret;
     }
