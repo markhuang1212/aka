@@ -15,5 +15,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build the Docker image
-      run: docker build . -t ghcr.io/markhuang1212/
+      run: docker build . -t ghcr.io/markhuang1212/aka
     - run: echo $GITHUB_TOKEN | docker login ghcr.io -u markhuang1212 --password-stdin
+    - run: docker push ghcr.io/markhuang1212/aka
