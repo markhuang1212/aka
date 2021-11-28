@@ -3,11 +3,14 @@ using aka;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var dataFolder = Environment.GetEnvironmentVariable("APP_DATA") ?? Environment.CurrentDirectory;
+var dataUrl = Path.Combine(dataFolder, "data.txt");
+var dataController = new DataController(dataUrl);
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSingleton<DataController>(dataController);
 
 var app = builder.Build();
 
@@ -18,17 +21,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseDefaultFiles();
+
+app.UseStaticFiles();
+
 // app.UseHttpsRedirection();
 
 // app.UseAuthorization();
 
 app.MapControllers();
-
-var dataFolder = Environment.GetEnvironmentVariable("APP_DATA") ?? Environment.CurrentDirectory;
-
-var dataUrl = Path.Combine(dataFolder, "data.txt");
-Console.WriteLine($"Data file: {dataUrl}");
-
-DataController.shared = new DataController(dataUrl);
 
 app.Run();

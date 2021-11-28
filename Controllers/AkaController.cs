@@ -7,12 +7,12 @@ namespace aka.Controllers;
 public class AkaController : ControllerBase
 {
     private readonly ILogger<AkaController> _logger;
-    private DataController _dataController;
+    private readonly DataController _dataController;
 
-    public AkaController(ILogger<AkaController> logger)
+    public AkaController(ILogger<AkaController> logger, DataController dataController)
     {
         _logger = logger;
-        _dataController = DataController.shared!;
+        _dataController = dataController;
     }
 
     [HttpGet("all")]

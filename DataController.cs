@@ -5,9 +5,9 @@ using System.Linq;
 using System.Net;
 using System.Collections.Generic;
 
-class DataController
+public class DataController
 {
-    public static DataController? shared;
+    // public static DataController? shared;
     string? dataFile;
     public Dictionary<string, string> data = new Dictionary<string, string>();
     public static Tuple<string, string> ParseLineToKV(string line)
