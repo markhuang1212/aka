@@ -1,8 +1,8 @@
 name: Continous Integration
 
 on:
-#   push:
-#     branches: [ main ]
+  push:
+    branches: [ release ]
   workflow_dispatch:
 
 jobs:
