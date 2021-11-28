@@ -5,12 +5,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var dataFolder = Environment.GetEnvironmentVariable("APP_DATA") ?? Environment.CurrentDirectory;
 var dataUrl = Path.Combine(dataFolder, "data.txt");
-var dataController = new DataController(dataUrl);
+// var dataController = new DataController(dataUrl);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSingleton<DataController>(dataController);
+builder.Services.AddSingleton<DataController>(x => new DataController(x.GetRequiredService<ILogger<DataController>>(), dataUrl));
 
 var app = builder.Build();
 
@@ -21,14 +21,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseDefaultFiles();
-
-app.UseStaticFiles();
-
 // app.UseHttpsRedirection();
 
 // app.UseAuthorization();
 
-app.MapControllers();
+app.UseDefaultFiles();
+
+app.UseStaticFiles();
+
+// use controller when url doesn't start with /ui
+app.MapWhen(context => !context.Request.Path.ToUriComponent().StartsWith("/ui"), appBranch =>
+{
+    appBranch.UseRouting();
+    appBranch.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
+});
 
 app.Run();

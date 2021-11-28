@@ -9,6 +9,7 @@ public class DataController
 {
     // public static DataController? shared;
     string? dataFile;
+    private readonly ILogger<DataController> _logger;
     public Dictionary<string, string> data = new Dictionary<string, string>();
     public static Tuple<string, string> ParseLineToKV(string line)
     {
@@ -35,10 +36,14 @@ public class DataController
         return new Tuple<string, string>(k, v);
     }
 
-    public DataController(string? dataFile)
+    public DataController(ILogger<DataController> logger, string? dataFile)
     {
-        if (dataFile == null)
+        this._logger = logger;
+        if (dataFile == null) // in memory
+        {
+            _logger.LogInformation("No dataFile given, in memory mode");
             return;
+        }
 
         this.dataFile = dataFile;
         var lines = File.ReadLines(dataFile);
@@ -60,6 +65,7 @@ public class DataController
                 // ignore
             }
         }
+        _logger.LogInformation($"Loaded {data.Count} entries from {dataFile}");
     }
 
     public async Task save()

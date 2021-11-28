@@ -15,6 +15,12 @@ public class AkaController : ControllerBase
         _dataController = dataController;
     }
 
+    [HttpGet]
+    public IActionResult GetRoot()
+    {
+        return Redirect("/ui");
+    }
+
     [HttpGet("all")]
     public IActionResult GetAllEntries()
     {
