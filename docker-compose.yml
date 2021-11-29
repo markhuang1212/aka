@@ -11,9 +11,11 @@ services:
       - APP_DATA=/data
     volumes:
       - "/data:/data"
+    restart: always
   cloudflared:
     image: cloudflare/cloudflared:2021.11.0
     volumes:
       - ~/.cloudflared:/etc/cloudflared
     command: tunnel --hostname hmpg.dev --url http://webapp:8080
-    
+    restart: always
+
