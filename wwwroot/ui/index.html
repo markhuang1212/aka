@@ -54,14 +54,16 @@
 
                 // initialize action cell
                 let deleteButton = document.createElement('button')
-                deleteButton.innerText = 'Delete'
-                deleteButton.addEventListener('click', async () => {
-                    let req = await fetch(`/${id}`, {
-                        method: 'DELETE'
+                deleteButton.innerText = 'Delete';
+                (id => {
+                    deleteButton.addEventListener('click', async () => {
+                        let req = await fetch(`/${id}`, {
+                            method: 'DELETE'
+                        })
+                        let data = await req.text()
+                        location.reload()
                     })
-                    let data = await req.text()
-                    location.reload()
-                })
+                })(id)
                 actionCell.appendChild(deleteButton)
 
                 row.appendChild(idCell)
@@ -79,7 +81,7 @@
             let value = document.getElementById('value').value
             if (id === "" || value === "")
                 return
-            if(!value.startsWith('https://')) {
+            if (!value.startsWith('https://')) {
                 value = 'https://' + value
             }
             let url = new URL(location.protocol + '//' + location.host)
