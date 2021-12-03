@@ -17,7 +17,7 @@
 
 <body>
     <h1>Aka</h1>
-    <table id="EntryTable" style="width:400px">
+    <table id="EntryTable" style="max-width:800px">
         <tr>
             <th>ID</th>
             <th>URL</th>
@@ -43,8 +43,16 @@
                 let urlCell = document.createElement('td')
                 let actionCell = document.createElement('td')
 
+                // initialize id cell
                 idCell.innerText = id
-                urlCell.innerText = data[id]
+
+                // initialize url cell
+                let url = document.createElement('a')
+                url.href = data[id]
+                url.innerText = data[id]
+                urlCell.appendChild(url)
+
+                // initialize action cell
                 let deleteButton = document.createElement('button')
                 deleteButton.innerText = 'Delete'
                 deleteButton.addEventListener('click', async () => {
@@ -55,6 +63,7 @@
                     location.reload()
                 })
                 actionCell.appendChild(deleteButton)
+
                 row.appendChild(idCell)
                 row.appendChild(urlCell)
                 row.appendChild(actionCell)
@@ -70,6 +79,9 @@
             let value = document.getElementById('value').value
             if (id === "" || value === "")
                 return
+            if(!value.startsWith('https://')) {
+                value = 'https://' + value
+            }
             let url = new URL(location.protocol + '//' + location.host)
             url.searchParams.append('id', id)
             url.searchParams.append('value', value)
